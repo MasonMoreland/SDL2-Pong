@@ -33,29 +33,29 @@ float calc_angle(float y1, float y2, int height) {
 int main(int argc, char* argv[]) {
 
     std::cout << "Starting SDL Application..." << std::endl;
-    SDL_Event e;
+    //SDL_Event e;
     SDL_Renderer *ren = nullptr;
     SDL_Window *win = nullptr;
     SDL_GameController *controller = nullptr;
 
     SDL_Haptic *haptic = nullptr;
 
-    Initialise(&ren,&win);
+    //Initialise(&ren,&win);
 
     // Check for controller support
-    if (SDL_NumJoysticks() == 1 && SDL_IsGameController(0)) {
-        controller = SDL_GameControllerOpen(0);
-        std::cout << "Found a controller: " << SDL_GameControllerName(controller) << std::endl;
+    //if (SDL_NumJoysticks() == 1 && SDL_IsGameController(0)) {
+    //    controller = SDL_GameControllerOpen(0);
+    //    std::cout << "Found a controller: " << SDL_GameControllerName(controller) << std::endl;
 
-        haptic = SDL_HapticOpen(0);
+    //    haptic = SDL_HapticOpen(0);
 
-        SDL_HapticRumbleInit(haptic);
-    }
+    //    SDL_HapticRumbleInit(haptic);
+    //}
 
     int board_width;
     int board_height;
-    SDL_Texture *squareTex = IMG_LoadTexture(ren, "../img/pong_board.png");
-    SDL_QueryTexture(squareTex, NULL, NULL, &board_width, &board_height);
+    //SDL_Texture *squareTex = IMG_LoadTexture(ren, "../img/pong_board.png");
+    //SDL_QueryTexture(squareTex, NULL, NULL, &board_width, &board_height);
 
     SDL_Color whiteColor = {255, 255, 255};
     SDL_Surface *fpsCounter;
@@ -106,34 +106,36 @@ int main(int argc, char* argv[]) {
 
         if(elapsed > 100) {
             fps = round(frames / (elapsed / 1000.0));
+	    printf("fps = %f\n", fps);
             frames = 0;
             prevTime = currTime;
         }
 
-        while(SDL_PollEvent(&e)) {
-            if(e.type == SDL_QUIT)  quit = true;
-            if(e.type == SDL_KEYDOWN) {
-                switch(e.key.keysym.scancode) {
-                case SDL_SCANCODE_ESCAPE:
-                    quit = true;
-                    break;
-                }
-            }
-        }
+        // while(SDL_PollEvent(&e)) {
+        //     if(e.type == SDL_QUIT)  quit = true;
+        //     if(e.type == SDL_KEYDOWN) {
+        //         switch(e.key.keysym.scancode) {
+        //         case SDL_SCANCODE_ESCAPE:
+        //             quit = true;
+        //             break;
+        //         }
+        //     }
+        // }
 
         Uint8 upButton = 0;
         Uint8 downButton = 0;
 
-        if(controller) {
-            downButton = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
-            upButton = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
-        }
+        // if(controller) {
+        //     downButton = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+        //     upButton = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
+        // }
 
+	//TODO: get move input
         // Player Movement
-        if(keystates[SDL_SCANCODE_UP] || upButton)
-            p1.pos.y -= p1.speed;
-        if(keystates[SDL_SCANCODE_DOWN] || downButton)
-            p1.pos.y += p1.speed;
+        //if(keystates[SDL_SCANCODE_UP] || upButton)
+        //    p1.pos.y -= p1.speed;
+        //if(keystates[SDL_SCANCODE_DOWN] || downButton)
+        //    p1.pos.y += p1.speed;
 
         // Basic AI
         if(b.y < p2.pos.y + p2.pos.h/2) {
@@ -223,45 +225,45 @@ int main(int argc, char* argv[]) {
             b.vy = ((b.vy>0)? -1 : 1) * b.speed * sin(angle);
         }
 
-        SDL_RenderClear(ren);
+        //SDL_RenderClear(ren);
 
-        SDL_RenderCopy(ren, squareTex, NULL, &p1.pos);
-        SDL_RenderCopy(ren, squareTex, NULL, &p2.pos);
+        //SDL_RenderCopy(ren, squareTex, NULL, &p1.pos);
+        //SDL_RenderCopy(ren, squareTex, NULL, &p2.pos);
 
         // Draw the center line
-        renderTexture(squareTex, ren, SCREEN_WIDTH/2 - CENTER_WIDTH/2, 0, CENTER_WIDTH, SCREEN_HEIGHT);
+        //renderTexture(squareTex, ren, SCREEN_WIDTH/2 - CENTER_WIDTH/2, 0, CENTER_WIDTH, SCREEN_HEIGHT);
 
         // Draw the Ball
-        renderTexture(squareTex, ren, b.x, b.y, BALL_WIDTH, BALL_HEIGHT);
+        //renderTexture(squareTex, ren, b.x, b.y, BALL_WIDTH, BALL_HEIGHT);
 
         // Display the score
-        sprintf(buffer, "%d", p1.score);
-        SDL_Texture *p1score = renderText(buffer, "../fonts/sample.ttf", whiteColor, 40, ren);
-        sprintf(buffer, "%d", p2.score);
-        SDL_Texture *p2score = renderText(buffer, "../fonts/sample.ttf", whiteColor, 40, ren);
+        //sprintf(buffer, "%d", p1.score);
+        //SDL_Texture *p1score = renderText(buffer, "../fonts/sample.ttf", whiteColor, 40, ren);
+        //sprintf(buffer, "%d", p2.score);
+        //SDL_Texture *p2score = renderText(buffer, "../fonts/sample.ttf", whiteColor, 40, ren);
 
-        int width;
-        SDL_QueryTexture(p1score, NULL, NULL, &width, NULL);
+        //int width;
+        //SDL_QueryTexture(p1score, NULL, NULL, &width, NULL);
 
-        renderTexture(p1score, ren, SCREEN_WIDTH/2 - width - 10, 10);
-        renderTexture(p2score, ren, SCREEN_WIDTH/2 + 10, 10);
+        //renderTexture(p1score, ren, SCREEN_WIDTH/2 - width - 10, 10);
+        //renderTexture(p2score, ren, SCREEN_WIDTH/2 + 10, 10);
 
-        SDL_DestroyTexture(p1score);
-        SDL_DestroyTexture(p2score);
+        //SDL_DestroyTexture(p1score);
+        //SDL_DestroyTexture(p2score);
 
-        // Extremely ineffecient way of displaying text
-        sprintf(buffer, "%.0f", fps);
-        SDL_Texture *fpsCounter = renderText(buffer, "../fonts/sample.ttf", whiteColor, 20, ren);
-        renderTexture(fpsCounter, ren, SCREEN_WIDTH - 20, 0);
-        SDL_DestroyTexture(fpsCounter);
+        //// Extremely ineffecient way of displaying text
+        //sprintf(buffer, "%.0f", fps);
+        //SDL_Texture *fpsCounter = renderText(buffer, "../fonts/sample.ttf", whiteColor, 20, ren);
+        //renderTexture(fpsCounter, ren, SCREEN_WIDTH - 20, 0);
+        //SDL_DestroyTexture(fpsCounter);
 
-        SDL_RenderPresent(ren);
+        //SDL_RenderPresent(ren);
     }
 
     if(haptic)
         SDL_HapticClose(haptic);
 
-    SDL_DestroyTexture(squareTex);
+    //SDL_DestroyTexture(squareTex);
     Cleanup(&ren, &win, &controller);
     return 0;
 }
